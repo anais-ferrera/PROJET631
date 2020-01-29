@@ -18,6 +18,7 @@ class Fichier:
     def alphabet(self):
         #on oouvre le fichier
         fichier = open(self.texte,'r')
+        
         #on initialise 2 listes a des listes vides
         alphabet = []
         liste=[]
@@ -35,7 +36,14 @@ class Fichier:
                     #on ajoute a notre autre liste la frequence correspondant
                     #a ce caractere
                     liste.append((frequence,lettre))
-                    
+        
+        #on cree un autre fichier dans lequel apparait la taille de l'alphabet
+        #et la frequence associee a chaque caractere
+        with open(self.texte+"_freq.txt","w") as f :
+            f.write("Taille de l\'alphabet:"+str(len(liste))+"\n")
+            for elem in sorted(liste):
+                f.write(str(elem)+"\n")
+            
         fichier.close 
         #on retourne la liste composee des caracteres du texte associes a leur
         #frequence triee par ordre croissant de frequence puis par ordre 
@@ -72,8 +80,7 @@ class Fichier:
     def arbre(self):
         while(len(self.listeArbre)!=1):
             self.creationArbre()
-            #self.drawArbre()
-    
+     
     def creationArbre(self):
         
         ab1=self.listeArbre[0]
@@ -95,16 +102,16 @@ class Fichier:
         return listeA
             
         
-#    def tauxCompression(self):
-#        longTexte=self.longueurTexte*8
-#        return(1-len(self.arbre)/longTexte)*100
+    def tauxCompression(self):
+        longTexte=self.longueurTexte*8
+        return(1-len(self.arbre)/longTexte)*100
             
 
 
 texte= 'textesimple.txt'  
 f=Fichier(texte)
 print(f.alphabet())
-print(f.indexNewArbre())
+
 
 #print(f.tauxCompression())
 
