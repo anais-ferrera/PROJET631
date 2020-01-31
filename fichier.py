@@ -94,12 +94,13 @@ class Fichier:
         index=self.indexNewArbre(arbre)
         self.listeArbre[index:index]=[arbre]
         
-    def indexNewArbre(self):
+    def indexNewArbre(self,nouvelArbre):
         listeA=[]
-        for i in self.listeArbre:
-            listeA.append(i)
-            
-        return listeA
+        for arbre in self.listeArbre:
+            listeA.append((arbre.valeur,arbre.label))
+        listeA.append((nouvelArbre.valeur,nouvelArbre.label))
+        sorted(listeA)          
+        return listeA.index((nouvelArbre.valeur,nouvelArbre.label))
             
         
     def tauxCompression(self):
