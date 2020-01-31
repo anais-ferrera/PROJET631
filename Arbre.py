@@ -36,10 +36,10 @@ class Arbre:
         else:
             
             if self.filsgauche!=None:
-                return self.code(self.filsgauche,code+1)
+                return self.code(self.filsgauche,code +1)
             
             if self.filsdroit != None:
-                return self.code(self.filsdroit,code+0)
+                return self.code(self.filsdroit,code +0)
             
     
             
