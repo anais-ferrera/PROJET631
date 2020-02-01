@@ -23,7 +23,7 @@ class Fichier:
         alphabet = []
         liste=[]
         
-        #☻on parcourt les lignes du fichiers
+        #on parcourt les lignes du fichiers
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for lettre in ligne:
@@ -80,32 +80,39 @@ class Fichier:
             #on ajoute a la liste des arbres chaque tuple en creant un arbre 
             #a partir de chaque tuple
             self.listeArbre.append(Arbre(freq,alpha))
+            
+        return self.listeArbre
      
     #on cree l'arbre
     def arbre(self):
         #tant qu'il ne reste pas un seul element dans la liste des arbres
         while(len(self.listeArbre)!=1):
             #on appelle la methode creationArbre()
+            
             self.creationArbre()
-    
+        print("hey")
+        return self.listeArbre[0].code_profondeur()
+        
     
     def creationArbre(self):
         
         self.creation_feuille()
         
+        
         ab1=self.listeArbre[0]
         ab2=self.listeArbre[1]
         
         
-        arbre=Arbre('',ab1.valeur+ab2.valeur,ab2.label,ab1.label)
+        arbre=Arbre(ab1.valeur+ab2.valeur,'',ab2.label,ab1.label)
         self.listeArbre.pop(1)
         self.listeArbre.pop(0)
-        arbre.code("l")
+        
         
         index=self.indexNewArbre(arbre)
         self.listeArbre[index:index]=[arbre]
         
-        
+        print(self.listeArbre)
+        return self.listeArbre
         
         
     #methode qui permet de determiner l'index correspondant a l'endroit 
@@ -122,10 +129,11 @@ class Fichier:
         #parametre
         listeA.append((nouvelArbre.valeur,nouvelArbre.label))
         #on tri cette liste
-        sorted(listeA)
+        l=sorted(listeA)
+        #print(l.index((nouvelArbre.valeur,nouvelArbre.label)))
         #on retourne l'index de l'arbre passe en parametre correspondant a sa
         #place dans le liste cree initialement           
-        return listeA.index((nouvelArbre.valeur,nouvelArbre.label))
+        return l.index((nouvelArbre.valeur,nouvelArbre.label))
             
         
     def tauxCompression(self):
@@ -137,8 +145,8 @@ class Fichier:
 texte= 'textesimple.txt'  
 f=Fichier(texte)
 print(f.alphabet())
-a=f.creationArbre()
-print(a)
+print(f.creationArbre())
+
 
 
 #print(f.tauxCompression())
