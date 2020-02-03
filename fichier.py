@@ -17,7 +17,7 @@ class Fichier:
     #creation de la liste alphabet et frquence des elements du texte
     def alphabet(self):
         #on oouvre le fichier
-        fichier = open(self.texte,'r')
+        fichier = open(self.texte+".txt",'r')
         
         #on initialise 2 listes a des listes vides
         alphabet = []
@@ -54,7 +54,7 @@ class Fichier:
     def frequence (self,lettre):
         
         #on ouvre le fichier
-        fichier = open(self.texte,'r')
+        fichier = open(self.texte+".txt",'r')
         #on initialise la frequence du caractere a 0
         frequence_caractere=0
         
@@ -94,11 +94,10 @@ class Fichier:
             #on appelle la methode creationArbre()
             self.creationArbre()
         
-        print("valeur arbre",self.listeArbre[0].get_valeur())
+        #print("valeur arbre",self.listeArbre[0].get_valeur())
+        return self.listeArbre[0].parcours_profondeur("u")
     
-        print(self.listeArbre[0].get_filsgauche())
-        print(self.listeArbre[0].get_filsdroit())
-        return self.listeArbre[0].parcours_profondeur()
+            
     
     def creationArbre(self):
         
@@ -115,9 +114,7 @@ class Fichier:
         
         index=self.indexNewArbre(arbre)
         self.listeArbre[index:index]=[arbre]
-        
-        
-        return self.listeArbre
+       
         
     #methode qui permet de determiner l'index correspondant a l'endroit 
     #d'insertion de l'arbre dans la liste des arbres
@@ -133,10 +130,11 @@ class Fichier:
         #parametre
         listeA.append((nouvelArbre.valeur,nouvelArbre.label))
         #on tri cette liste
-        sorted(listeA)
         #on retourne l'index de l'arbre passe en parametre correspondant a sa
-        #place dans le liste cree initialement           
-        return listeA.index((nouvelArbre.valeur,nouvelArbre.label))
+        #place dans le liste cree initialement      
+        print(sorted(listeA))
+        
+        return sorted(listeA).index((nouvelArbre.valeur,nouvelArbre.label))
             
         
     def tauxCompression(self):
@@ -145,10 +143,11 @@ class Fichier:
             
 
 
-texte= 'textesimple.txt'  
+texte= 'textesimple'  
 f=Fichier(texte)
 print(f.alphabet())
-print(f.arbre())
+p=f.arbre()
+print(p)
 
 
 

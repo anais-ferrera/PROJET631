@@ -12,7 +12,7 @@ class Arbre:
         self.label=label
         self.filsdroit=filsdroit
         self.filsgauche=filsgauche
-        self.code =""
+
         
         
     def get_label(self):
@@ -27,30 +27,19 @@ class Arbre:
     def get_filsdroit(self):
         return self.filsdroit.valeur
     
-    def parcours_profondeur(self,code=""):
-        
-        self.code=code
-        print(self.code,self.get_label())
-        
-        if self.filsgauche !=None:
-            self.filsgauche.parcours_profondeur(code=code+"0")
-        if self.filsdroit != None:
-            self.filsdroit.parcours_profondeur(code=code+"1")
-        
-        return code
-    
-    
-#        for fils in liste_fils :
-#            fils.parcours_profondeur()
-#            
-#    def code(self,code=""):
-#        
-#        self.code=code
-#        
-#        if self.filsgauche != None:
-#            pass
-    
-   
+    def parcours_profondeur(self,lettre,code=""):
+
+        if lettre==self.label:
+            return code
+        else:
+            if self.filsgauche !=None:
+                if self.filsgauche.parcours_profondeur(lettre,code+"0") != None:
+                    return self.filsgauche.parcours_profondeur(lettre,code+"0")             
+            
+            if self.filsdroit != None:
+                if self.filsdroit.parcours_profondeur(lettre,code+"1") != None:
+                    return self.filsdroit.parcours_profondeur(lettre,code+"1")
+            
          
          
  
