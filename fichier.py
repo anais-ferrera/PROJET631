@@ -10,7 +10,7 @@ class Fichier:
     
     def __init__(self,texte):
         self.texte=texte
-        self.liste_afreq=self.alphabet()
+        #self.liste_afreq=self.alphabet()
         self.listeArbre=[]
         self.longueurTexte=0
         
@@ -23,7 +23,7 @@ class Fichier:
         alphabet = []
         liste=[]
         
-        #on parcourt les lignes du fichiers
+        #☻on parcourt les lignes du fichiers
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for lettre in ligne:
@@ -74,36 +74,41 @@ class Fichier:
     
     #on cree les feuilles
     def creation_feuille(self):
+        liste_afreq=self.alphabet()
         #on parcourt les tuples (frequences,caractere) present dans la liste
         #(frequence,alphabet)
-        for (freq,alpha) in self.liste_afreq:
+        print("les feuilles",liste_afreq)
+        for (freq,alpha) in liste_afreq:
             #on ajoute a la liste des arbres chaque tuple en creant un arbre 
             #a partir de chaque tuple
             self.listeArbre.append(Arbre(freq,alpha))
-            
+        
+        
         return self.listeArbre
      
     #on cree l'arbre
     def arbre(self):
+        self.creation_feuille()
         #tant qu'il ne reste pas un seul element dans la liste des arbres
         while(len(self.listeArbre)!=1):
             #on appelle la methode creationArbre()
-            
             self.creationArbre()
-        print("hey")
-        return self.listeArbre[0].code_profondeur()
         
+        print("valeur arbre",self.listeArbre[0].get_valeur())
+    
+        print(self.listeArbre[0].get_filsgauche())
+        print(self.listeArbre[0].get_filsdroit())
+        return self.listeArbre[0].parcours_profondeur()
     
     def creationArbre(self):
         
-        self.creation_feuille()
         
         
         ab1=self.listeArbre[0]
         ab2=self.listeArbre[1]
         
         
-        arbre=Arbre(ab1.valeur+ab2.valeur,'',ab2.label,ab1.label)
+        arbre=Arbre(ab1.valeur+ab2.valeur,'',ab1,ab2)
         self.listeArbre.pop(1)
         self.listeArbre.pop(0)
         
@@ -111,9 +116,8 @@ class Fichier:
         index=self.indexNewArbre(arbre)
         self.listeArbre[index:index]=[arbre]
         
-        print(self.listeArbre)
-        return self.listeArbre
         
+        return self.listeArbre
         
     #methode qui permet de determiner l'index correspondant a l'endroit 
     #d'insertion de l'arbre dans la liste des arbres
@@ -129,11 +133,10 @@ class Fichier:
         #parametre
         listeA.append((nouvelArbre.valeur,nouvelArbre.label))
         #on tri cette liste
-        l=sorted(listeA)
-        #print(l.index((nouvelArbre.valeur,nouvelArbre.label)))
+        sorted(listeA)
         #on retourne l'index de l'arbre passe en parametre correspondant a sa
         #place dans le liste cree initialement           
-        return l.index((nouvelArbre.valeur,nouvelArbre.label))
+        return listeA.index((nouvelArbre.valeur,nouvelArbre.label))
             
         
     def tauxCompression(self):
@@ -145,7 +148,7 @@ class Fichier:
 texte= 'textesimple.txt'  
 f=Fichier(texte)
 print(f.alphabet())
-print(f.creationArbre())
+print(f.arbre())
 
 
 
