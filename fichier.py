@@ -100,25 +100,37 @@ class Fichier:
     
     def affichage_code(self):
         
+        #ouverture du fichier
         fichier = open(self.texte+".txt",'r')
-         #on parcourt les lignes du fichier
+        
+        liste_bin=[]
+        #on parcourt les lignes du fichier
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for caractere in ligne:
                 print(caractere)
-                self.code_bin=print(self.listeArbre[0].parcours_profondeur(caractere))
+                self.code_bin=self.listeArbre[0].parcours_profondeur(caractere)
+                print(self.code_bin)
+                liste_bin.append(self.code_bin)
         
-        return self.code_bin
+        resul=""
+        for chiff_bin in liste_bin:
+             resul = resul + str(chiff_bin)           
         
-    def stockage(self):
         
-        self.affichage_code()
-        octet=""
-        for chiff_bin in self.code_bin:
-            if len(octet!=8):
-                octet+=chiff_bin
-            
-        print(octet)
+        resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+        print(resulfin)             
+        '''Convertir la chaine en int pour ensuite faire (int).to_bytes(1,byteorder)''' 
+        with open(self.texte+"_comp.bin","wb") as f:
+            for j in resulfin:
+                j_byte=str.encode(j)
+                f.write(bytes(j_byte))
+                
+        print(resul)
+        return resul
+        
+   
+    
     
     def creationArbre(self):
         
@@ -168,7 +180,7 @@ texte= 'textesimple'
 f=Fichier(texte)
 print("l'alphabet  ",f.alphabet(),"\n")
 p=f.arbre()
-f.stockage()
+#f.stockage()
 #print(f.tauxCompression())
 
 
