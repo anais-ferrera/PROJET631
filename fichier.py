@@ -13,7 +13,7 @@ class Fichier:
         #self.liste_afreq=self.alphabet()
         self.listeArbre=[]
         self.longueurTexte=0
-        
+        self.code_bin=""
     #creation de la liste alphabet et frquence des elements du texte
     def alphabet(self):
         #on oouvre le fichier
@@ -62,6 +62,7 @@ class Fichier:
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for caractere in ligne:
+                
                 #si le caractere correspond a celui passe en parametre
                 if caractere==lettre :
                     #alors on ajoute +1 a la frequence de ce caractere
@@ -77,13 +78,12 @@ class Fichier:
         liste_afreq=self.alphabet()
         #on parcourt les tuples (frequences,caractere) present dans la liste
         #(frequence,alphabet)
-        print("les feuilles",liste_afreq)
+        print("les feuilles",liste_afreq,"\n")
         for (freq,alpha) in liste_afreq:
             #on ajoute a la liste des arbres chaque tuple en creant un arbre 
             #a partir de chaque tuple
             self.listeArbre.append(Arbre(freq,alpha))
-        
-        
+            
         return self.listeArbre
      
     #on cree l'arbre
@@ -94,10 +94,31 @@ class Fichier:
             #on appelle la methode creationArbre()
             self.creationArbre()
         
-        #print("valeur arbre",self.listeArbre[0].get_valeur())
-        return self.listeArbre[0].parcours_profondeur("u")
+        self.affichage_code()
+        
     
+    
+    def affichage_code(self):
+        
+        fichier = open(self.texte+".txt",'r')
+         #on parcourt les lignes du fichier
+        for ligne in fichier:
+            #on parcourt les caracteres de chaque ligne
+            for caractere in ligne:
+                print(caractere)
+                self.code_bin=print(self.listeArbre[0].parcours_profondeur(caractere))
+        
+        return self.code_bin
+        
+    def stockage(self):
+        
+        self.affichage_code()
+        octet=""
+        for chiff_bin in self.code_bin:
+            if len(octet!=8):
+                octet+=chiff_bin
             
+        print(octet)
     
     def creationArbre(self):
         
@@ -145,12 +166,9 @@ class Fichier:
 
 texte= 'textesimple'  
 f=Fichier(texte)
-print(f.alphabet())
+print("l'alphabet  ",f.alphabet(),"\n")
 p=f.arbre()
-print(p)
-
-
-
+f.stockage()
 #print(f.tauxCompression())
 
 
