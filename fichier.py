@@ -78,7 +78,7 @@ class Fichier:
         liste_afreq=self.alphabet()
         #on parcourt les tuples (frequences,caractere) present dans la liste
         #(frequence,alphabet)
-        print("les feuilles",liste_afreq,"\n")
+        #print("les feuilles",liste_afreq,"\n")
         for (freq,alpha) in liste_afreq:
             #on ajoute a la liste des arbres chaque tuple en creant un arbre 
             #a partir de chaque tuple
@@ -108,9 +108,9 @@ class Fichier:
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for caractere in ligne:
-                print(caractere)
+                #print(caractere)
                 self.code_bin=self.listeArbre[0].parcours_profondeur(caractere)
-                print(self.code_bin)
+                #print(self.code_bin)
                 liste_bin.append(self.code_bin)
         
         resul=""
@@ -119,17 +119,39 @@ class Fichier:
         
         
         resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
-        print(resulfin)             
+        
+#        chiffBin=0
+#        for i in range(0,len(resulfin),1):
+#            chiffBin=chiffBin+resulfin[i]*2**(i)
+        
+        int_bin=[]
+        for i in resulfin:
+            int_bin.append(int(i))
+            
+        print(int_bin)
+        
+        nb=0
+        int_i=[]
+        for j in range(len(int_bin)):
+            nb=nb+int_bin[j]*2**0
+            int_i.append(nb)
+        print(int_i)
+        #print(resulfin)
+        #print(chiffBin)             
         '''Convertir la chaine en int pour ensuite faire (int).to_bytes(1,byteorder)''' 
         with open(self.texte+"_comp.bin","wb") as f:
-            for j in resulfin:
-                j_byte=str.encode(j)
+            for j in int_i:
+                #j_byte=str.encode(j)
+                j_byte=(j).to_bytes((j.bit_length()//8)+1,byteorder='big')
                 f.write(bytes(j_byte))
                 
         print(resul)
         return resul
-        
-   
+            
+    def bit_length(self):
+          s = bin(self)       # binary representation:  bin(-37) --> '-0b100101'
+          s = s.lstrip('-0b') # remove leading zeros and minus sign
+          return len(s)       # len('100101') --> 6
     
     
     def creationArbre(self):
