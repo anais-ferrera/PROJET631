@@ -10,10 +10,11 @@ class Fichier:
     
     def __init__(self,texte):
         self.texte=texte
-        #self.liste_afreq=self.alphabet()
+        self.liste_afreq=self.alphabet()
         self.listeArbre=[]
-        self.longueurTexte=0
         self.code_bin=""
+        
+        
     #creation de la liste alphabet et frquence des elements du texte
     def alphabet(self):
         #on oouvre le fichier
@@ -72,6 +73,13 @@ class Fichier:
         #on retourne la frequence du caractere passe en parametre
         return frequence_caractere
     
+    def dictionnaire(self):
+        dictionnaire={}
+        
+        for (freq,alpha) in self.liste_afreq:
+            dictionnaire[alpha]=self.listeArbre[0].parcours_profondeur(alpha)
+        print(dictionnaire)
+        return dictionnaire
     
     #on cree les feuilles
     def creation_feuille(self):
@@ -94,12 +102,13 @@ class Fichier:
             #on appelle la methode creationArbre()
             self.creationArbre()
         
+        self.dictionnaire()
         self.affichage_code()
         
     
     
     def affichage_code(self):
-        
+        dico=self.dictionnaire()
         #ouverture du fichier
         fichier = open(self.texte+".txt",'r')
         
@@ -108,52 +117,54 @@ class Fichier:
         for ligne in fichier:
             #on parcourt les caracteres de chaque ligne
             for caractere in ligne:
-                #print(caractere)
-                self.code_bin=self.listeArbre[0].parcours_profondeur(caractere)
-                #print(self.code_bin)
-                liste_bin.append(self.code_bin)
+                liste_bin.append(dico[caractere])
         
-        resul=""
+        resul=''
         for chiff_bin in liste_bin:
-             resul = resul + str(chiff_bin)           
+             resul = resul + str(chiff_bin)
         
         
-        resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+        if (len(resul)%8)==0:
         
-#        chiffBin=0
-#        for i in range(0,len(resulfin),1):
-#            chiffBin=chiffBin+resulfin[i]*2**(i)
+            resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+        else:
+            while(len(resul)%8)!=0:
+                resul=resul+'0'
+            resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+        
+        resultatFinal=''
+        for chiff_fin in resulfin:
+            resultatFinal = resultatFinal + str(chiff_fin)
+        print(self.tauxCompression(len(resultatFinal)))
         
         int_bin=[]
         for i in resulfin:
-            int_bin.append(int(i))
+            int_bin.append(int(i,2))
             
-        print(int_bin)
         
-        nb=0
-        int_i=[]
-        for j in range(len(int_bin)):
-            nb=nb+int_bin[j]*2**0
-            int_i.append(nb)
-        print(int_i)
-        #print(resulfin)
-        #print(chiffBin)             
+
+                  
         '''Convertir la chaine en int pour ensuite faire (int).to_bytes(1,byteorder)''' 
         with open(self.texte+"_comp.bin","wb") as f:
-            for j in int_i:
+            for j in int_bin:
                 #j_byte=str.encode(j)
-                j_byte=(j).to_bytes((j.bit_length()//8)+1,byteorder='big')
+                j_byte=(j).to_bytes(1,byteorder='big')
                 f.write(bytes(j_byte))
                 
-        print(resul)
-        return resul
-            
-    def bit_length(self):
-          s = bin(self)       # binary representation:  bin(-37) --> '-0b100101'
-          s = s.lstrip('-0b') # remove leading zeros and minus sign
-          return len(s)       # len('100101') --> 6
-    
-    
+        fichier.close
+  
+    def tauxCompression(self,longBin):
+        volIni=0
+        fichier = open(self.texte + ".txt","r")
+        texte = fichier.read()
+        volIni = len(texte)*8
+        
+        volFin = longBin
+        print('volinitial',volIni)
+        print('volfinal',volFin)
+        return(1-volFin/volIni)*100
+        
+        
     def creationArbre(self):
         
         
@@ -192,15 +203,12 @@ class Fichier:
         return sorted(listeA).index((nouvelArbre.valeur,nouvelArbre.label))
             
         
-    def tauxCompression(self):
-        longTexte=self.longueurTexte*8
-        return(1-len(self.arbre)/longTexte)*100
             
 
 
-texte= 'textesimple'  
+texte= 'alice'  
 f=Fichier(texte)
-print("l'alphabet  ",f.alphabet(),"\n")
+#print("l'alphabet  ",f.alphabet(),"\n")
 p=f.arbre()
 #f.stockage()
 #print(f.tauxCompression())
