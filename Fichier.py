@@ -12,7 +12,6 @@ class Fichier:
         self.texte=texte
         self.liste_afreq=self.alphabet()
         self.listeArbre=[]
-        self.code_bin=""
         
         
     #creation de la liste alphabet et frquence des elements du texte
@@ -141,6 +140,7 @@ class Fichier:
         
         liste_octet=self.decoupage_octet(code_bin)
         
+        #concatenation du code binaire
         #on initialise un resultat final a une chaine vide
         codeFinal=''
         #on parcourt la liste de nos octets
