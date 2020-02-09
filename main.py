@@ -12,3 +12,7 @@ if __name__ == "__main__":
     texte = 'textesimple'
     f=Fichier(texte)
     f.arbre()
+    
+    
+    
+    

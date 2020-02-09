@@ -109,8 +109,6 @@ class Fichier:
             #on appelle la methode creationArbre()
             self.creationArbre()
         
-        #on appelle la methode permettant la creation du dictionnaire
-        self.dictionnaire()
         #on appelle la methode permettant l'affichage du code du texte
         self.affichage_code()
         
@@ -133,55 +131,61 @@ class Fichier:
                 liste_bin.append(dico[caractere])
         
         #on initialise un resultat a une chaine vide
-        resul=''
+        code_bin=''
         #on parcourt la liste des codes
         for chiff_bin in liste_bin:
             #on ajoute tous les codes de chaque caractere pour afficher un code total
-             resul = resul + str(chiff_bin)
+             code_bin = code_bin + str(chiff_bin)
         
+        
+        liste_octet=self.decoupage_octet(code_bin)
+        
+        #on initialise un resultat final a une chaine vide
+        codeFinal=''
+        #on parcourt la liste de nos octets
+        for chiff_fin in liste_octet:
+            #on ajoute tous nos octets les uns a la suite des autres
+            codeFinal = codeFinal + str(chiff_fin)
+        
+        #on affiche le taux de compression de notre resultat final 
+        print('Taux de compression',self.tauxCompression(len(codeFinal)),'%')
+        
+        #on converti les codes des caractreres en entier
+        #exemple : 00001001 = 9, on ajoute tous ces entiers dans une liste
+        int_octet=[]
+        for i in liste_octet:
+            int_octet.append(int(i,2))
+             
+        #on cree un fichier binaire dans lequel on place le texte compresse
+        with open(self.texte+"_comp.bin","wb") as f:
+            #on parcourt notre liste de nos entiers
+            for entier in int_octet:
+                #on converti les entiers en octet
+                byte=(entier).to_bytes(1,byteorder='big')
+                f.write(bytes(byte))
+                
+        fichier.close
+  
+    def decoupage_octet(self,liste):
+        
+        resultat =[]
         #on veut decouper le code total en octet
         #si la longueur du resultat total est divisible par 8
-        if (len(resul)%8)==0:
+        if (len(liste)%8)==0:
         
             #alors on separe le code total 8 par 8 (en octet) que l'on stocke dans une variable
-            resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+            resultat =  [liste[i:i+8] for i in range (0,len(liste),8)]
         
         #si c'est pas divisible par 8
         else:
             #tant que la longueur du texte n'est pas divisible par 8
-            while(len(resul)%8)!=0:
+            while(len(liste)%8)!=0:
                 #on ajoute des 0 au code
-                resul=resul+'0'
+                liste=liste+'0'
             #on separe 8 par 8 le code que l'on stocke dans une variable
-            resulfin =  [resul[i:i+8] for i in range (0,len(resul),8)]
+            resultat =  [liste[i:i+8] for i in range (0,len(liste),8)]
+        return resultat
         
-        #on initialise un resultat final a une chaine vide
-        resultatFinal=''
-        #on parcourt la liste de nos octets
-        for chiff_fin in resulfin:
-            #on ajoute tous nos octets les uns a la suite des autres
-            resultatFinal = resultatFinal + str(chiff_fin)
-            
-        #on affiche le taux de compression de notre resultat final 
-        print(self.tauxCompression(len(resultatFinal)))
-        
-        #on converti les codes des caractreres en entier
-        #exemple : 00001001 = 9, on ajoute tous ces entiers dans une liste
-        int_bin=[]
-        for i in resulfin:
-            int_bin.append(int(i,2))
-             
-        '''Convertir la chaine en int pour ensuite faire (int).to_bytes(1,byteorder)''' 
-        #on cree un fichier binaire dans lequel on place le texte compresse
-        with open(self.texte+"_comp.bin","wb") as f:
-            #on parcourt notre liste de nos entiers
-            for j in int_bin:
-                #on converti les entiers en octet
-                j_byte=(j).to_bytes(1,byteorder='big')
-                f.write(bytes(j_byte))
-                
-        fichier.close
-  
     #○methode permettant de calculer le taux de compression d'un fichier
     def tauxCompression(self,longBin):
         #on initialise un volume initial a 0
@@ -198,9 +202,8 @@ class Fichier:
         #le volume final correspond a la longueur donne en parametre
         volFin = longBin
         
-        print('volinitial',volIni)
-        print('volfinal',volFin)
-        print('Taux de compression')
+        print('volinitial du fichier',volIni)
+        print('volfinal du fichier ',volFin)
         
         #on retourne le taux de compression en pourcentage qui correspond a 
         #1-volumefinal/volumeinitial
