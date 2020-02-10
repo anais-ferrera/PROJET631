@@ -90,11 +90,11 @@ class Fichier:
     
     #on cree les feuilles
     def creation_feuille(self):
-        liste_afreq=self.alphabet()
+
         #on parcourt les tuples (frequences,caractere) present dans la liste
         #(frequence,alphabet)
         #print("les feuilles",liste_afreq,"\n")
-        for (freq,alpha) in liste_afreq:
+        for (freq,alpha) in self.liste_afreq:
             #on ajoute a la liste des arbres chaque tuple en creant un arbre 
             #a partir de chaque tuple
             self.listeArbre.append(Arbre(freq,alpha))
@@ -203,8 +203,8 @@ class Fichier:
         #le volume final correspond a la longueur donne en parametre
         volFin = longBin
         
-        print('volinitial du fichier',volIni)
-        print('volfinal du fichier ',volFin)
+        print('volinitial du fichier en bits',volIni)
+        print('volfinal du fichier en bits ',volFin)
         
         #on retourne le taux de compression en pourcentage qui correspond a 
         #1-volumefinal/volumeinitial
